@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Stasera</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/contact.css">
+    <script src="/js/navbar.js"></script>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div id="navbar"></div>
+    <script>
+        fetch("/components/navbar.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("navbar").innerHTML = html;
+                initNavbar();
+            });
+    </script>
+
+    <!-- CONTACT CONTENT -->
+    <main class="contact-wrapper">
+        <div class="contact-box">
+            <h2>Contatti</h2>
+            <p>Hai domande, idee o vuoi proporre il tuo locale per la piattaforma? Ecco come contattarci.</p>
+
+            <ul class="contact-list">
+                <li>
+                    <strong>Email</strong>
+                    <span>support@stasera.example.com</span>
+                </li>
+                <li>
+                    <strong>Assistenza Organizzatori</strong>
+                    <span>eventi@stasera.example.com</span>
+                </li>
+                <li>
+                    <strong>Sede</strong>
+                    <span>Milano / Roma, Italia</span>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <div id="footer"></div>
+    <script>
+        fetch("/components/footer.html")
+            .then(res => res.text())
+            .then(html => document.getElementById("footer").innerHTML = html);
+    </script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,94 @@
+/* ===== About Stylesheet - Stasera (Dark Theme) ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #0b0e14;
+    color: #e2e8f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.about-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.about-box {
+    background: #141722;
+    border: 1px solid #212636;
+    padding: 40px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 680px;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+}
+
+.about-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.about-box h3 {
+    margin-top: 25px;
+    margin-bottom: 15px;
+    color: #d4ff32;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.about-box p {
+    color: #8b93a7;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+}
+
+.feature-list li {
+    padding: 10px 0 10px 28px;
+    color: #c4ccde;
+    position: relative;
+    font-size: 14.5px;
+}
+
+.feature-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #d4ff32;
+    font-weight: bold;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .about-box {
+        padding: 24px;
+    }
+}

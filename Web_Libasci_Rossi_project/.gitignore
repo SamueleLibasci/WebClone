@@ -1,0 +1,12 @@
+# Environment variables
+.env
+*.env
+**/.env
+
+# Dependencies & caches
+**/node_modules/
+
+# Local project tooling
+.codegraph/
+.projectmem/
+

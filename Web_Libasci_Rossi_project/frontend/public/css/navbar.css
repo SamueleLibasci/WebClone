@@ -1,0 +1,189 @@
+/* ===== Barra di navigazione principale "Stasera" (Dark theme) ===== */
+.navbar {
+    width: 100%;
+    background: #0d1017;
+    border-bottom: 1px solid #1a1e29;
+    padding: 16px 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.brand-link {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.brand-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.brand-tagline {
+    font-size: 13.5px;
+    font-weight: 400;
+    color: #636b7e;
+    letter-spacing: -0.1px;
+}
+
+/* ===== Collegamenti di navigazione ===== */
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link-item {
+    text-decoration: none;
+    color: #8a92a5;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 9999px;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+.nav-link-item:hover, .nav-link-item.active {
+    color: #d4ff32;
+    background: rgba(212, 255, 50, 0.08);
+}
+
+/* ===== Sezione destra: Aggiungi evento & Autenticazione ===== */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.btn-add-event {
+    background: #d4ff32;
+    color: #0d1017;
+    border: none;
+    border-radius: 9999px;
+    padding: 8px 18px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease, background 0.15s ease;
+    font-family: inherit;
+    box-shadow: 0 2px 8px rgba(212, 255, 50, 0.25);
+    white-space: nowrap;
+}
+
+.btn-add-event:hover {
+    background: #e2ff4f;
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+}
+
+.btn-add-event:active {
+    transform: translateY(0);
+}
+
+.nav-auth-container {
+    display: flex;
+    align-items: center;
+}
+
+.btn-auth {
+    background: #171a23;
+    color: #d8deeb;
+    border: 1px solid #2b3142;
+    border-radius: 9999px;
+    padding: 8px 20px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-auth:hover {
+    background: #222736;
+    border-color: #3f475d;
+    color: #ffffff;
+}
+
+/* Sezione utente autenticato */
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-welcome {
+    font-size: 13.5px;
+    color: #c4ccde;
+    font-weight: 500;
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-logout {
+    cursor: pointer;
+    border: 1px solid #382428;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ff6b7b;
+    background: #201417;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
+}
+
+.btn-logout:hover {
+    background: #33171c;
+    border-color: #e53935;
+    color: #ffffff;
+}
+
+/* ===== Responsive Mobile ===== */
+@media (max-width: 860px) {
+    .navbar {
+        padding: 14px 18px;
+        flex-direction: column;
+        gap: 14px;
+        align-items: stretch;
+    }
+
+    .nav-left {
+        justify-content: space-between;
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .brand-tagline {
+        display: none;
+    }
+
+    .nav-links {
+        gap: 8px;
+    }
+
+    .nav-right {
+        justify-content: flex-end;
+        width: 100%;
+    }
+}

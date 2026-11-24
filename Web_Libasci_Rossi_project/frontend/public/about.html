@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Stasera</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/about.css">
+    <script src="/js/navbar.js"></script>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div id="navbar"></div>
+    <script>
+        fetch("/components/navbar.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("navbar").innerHTML = html;
+                initNavbar();
+            });
+    </script>
+
+    <!-- ABOUT CONTENT -->
+    <main class="about-wrapper">
+        <div class="about-box">
+            <h2>Chi siamo — Stasera</h2>
+            <p><strong>Stasera</strong> è la piattaforma web dedicata alla scoperta di eventi, serate, locali e musica nella tua città.</p>
+
+            <p>Progettata per rendere semplice e immediato trovare cosa fare questa sera, l'applicazione combina una mappa interattiva alimentata da Google Maps con un sistema di filtraggio per data e posizione.</p>
+
+            <h3>Caratteristiche principali</h3>
+            <ul class="feature-list">
+                <li>Mappa interattiva integrata con le API di Google Maps.</li>
+                <li>Filtro eventi per oggi, domani, weekend e posizione geografica.</li>
+                <li>Autenticazione rapida e sicura tramite Google OAuth 2.0.</li>
+                <li>Gestione della sessione utente per salvare eventi preferiti.</li>
+                <li>Architettura backend modulare suddivisa in layer con responsabilità singola.</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <div id="footer"></div>
+    <script>
+        fetch("/components/footer.html")
+            .then(res => res.text())
+            .then(html => document.getElementById("footer").innerHTML = html);
+    </script>
+
+</body>
+
+</html>
+

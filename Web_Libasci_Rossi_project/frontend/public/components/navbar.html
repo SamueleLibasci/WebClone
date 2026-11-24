@@ -1,0 +1,29 @@
+<!--
+  Componente di navigazione condiviso "Stasera".
+  Viene caricato asincronamente tramite fetch() all'interno del contenitore #navbar di ciascuna pagina.
+-->
+<nav class="navbar">
+    <div class="nav-left">
+        <a href="/" class="brand-link">
+            <span class="brand-name">Stasera</span>
+            <span class="brand-tagline">cosa fare, dove uscire</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/" class="nav-link-item">Home</a></li>
+            <li><a href="/map" class="nav-link-item">Mappa</a></li>
+            <li><a href="/about" class="nav-link-item">About</a></li>
+            <li><a href="/contact" class="nav-link-item">Contact</a></li>
+        </ul>
+    </div>
+
+    <div class="nav-right">
+        <button type="button" class="btn-add-event" id="btn-open-add-event">Aggiungi evento</button>
+        <div class="nav-auth-container" id="nav-auth-container">
+            <a href="/login" class="btn-auth" id="nav-login">Accedi</a>
+            <div class="nav-user" id="nav-user" style="display: none;">
+                <span class="nav-welcome" id="nav-welcome"></span>
+                <button class="btn-logout" id="btn-logout" type="button">Esci</button>
+            </div>
+        </div>
+    </div>
+</nav>

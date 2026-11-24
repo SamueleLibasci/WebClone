@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mappa Eventi - Stasera</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/map.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="/js/navbar.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div id="navbar"></div>
+    <script>
+        const apiPrefix = window.location.pathname.startsWith("/api/v1") ? "/api/v1" : "";
+        fetch(apiPrefix + "/components/navbar.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("navbar").innerHTML = html;
+                if (typeof initNavbar === "function") initNavbar();
+            });
+    </script>
+
+    <!-- MAP PAGE CONTENT -->
+    <main class="map-page-wrapper">
+        <div class="map-page-box">
+            <h2>Mappa degli Eventi</h2>
+            <p class="subtitle">Esplora gli eventi e i locali attivi in tempo reale sulla mappa</p>
+
+            <div class="map-filters">
+                <button class="map-filter-btn active" type="button" data-category="all">Tutti gli eventi</button>
+                <button class="map-filter-btn" type="button" data-category="concerti">Musica & Concerti</button>
+                <button class="map-filter-btn" type="button" data-category="club">Club & DJ Set</button>
+                <button class="map-filter-btn" type="button" data-category="aperitivi">Aperitivi</button>
+                <button class="map-filter-btn" id="btn-user-location" type="button">Centra sulla mia posizione</button>
+            </div>
+
+            <!-- Contenitore della mappa -->
+            <div id="map">
+                <div style="padding: 40px; color: #8b93a7;">Caricamento mappa in corso...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <div id="footer"></div>
+    <script>
+        fetch(apiPrefix + "/components/footer.html")
+            .then(res => res.text())
+            .then(html => document.getElementById("footer").innerHTML = html);
+    </script>
+
+    <!-- SCRIPT MAPS DEDICATO (gestione Google Maps ed eventi) -->
+    <script src="/js/maps.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stasera - Trova Eventi nella tua Città</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <script src="/js/navbar.js"></script>
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+    <script>
+        fetch("/components/navbar.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("navbar").innerHTML = html;
+                initNavbar();
+            });
+    </script>
+
+    <div class="container">
+        <h1 class="page-title">Eventi</h1>
+        <p>Benvenuto su Stasera: scopri tutti gli eventi, locali e serate nella tua zona.</p>
+    </div>
+
+    <div id="footer"></div>
+    <script>
+        fetch("/components/footer.html")
+            .then(res => res.text())
+            .then(html => document.getElementById("footer").innerHTML = html);
+    </script>
+
+</body>
+
+</html>
+

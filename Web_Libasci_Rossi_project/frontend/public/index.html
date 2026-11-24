@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stasera — Cosa fare, dove uscire</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="/js/navbar.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+
+<body>
+
+    <!-- NAVBAR CONDIVISA -->
+    <div id="navbar"></div>
+    <script>
+        (function() {
+            var apiPrefix = window.location.pathname.startsWith("/api/v1") ? "/api/v1" : "";
+            fetch(apiPrefix + "/components/navbar.html")
+                .then(function(res) { return res.text(); })
+                .then(function(html) {
+                    document.getElementById("navbar").innerHTML = html;
+                    if (typeof initNavbar === "function") initNavbar();
+                });
+        })();
+    </script>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="main-container">
+
+        <!-- PRIMA RIGA: FILTRI DATA E SWITCH VISTA -->
+        <section class="filters-top-bar" aria-label="Filtri temporali e vista">
+            <div class="date-pills" id="date-pills-container">
+                <button type="button" class="date-pill" data-date="oggi">Oggi</button>
+                <button type="button" class="date-pill" data-date="domani">Domani</button>
+                <button type="button" class="date-pill" data-date="weekend">Weekend</button>
+                <button type="button" class="date-pill active" data-date="all">Tutti</button>
+            </div>
+
+            <div class="view-switch-wrapper" role="radiogroup" aria-label="Cambia vista">
+                <button type="button" class="view-toggle-btn active" id="btn-view-list" data-view="list">Lista</button>
+                <button type="button" class="view-toggle-btn" id="btn-view-map" data-view="map">Mappa</button>
+            </div>
+        </section>
+
+        <!-- SECONDA RIGA: DROPDOWN, RICERCA, POSIZIONE E AZZERA -->
+        <section class="filters-secondary-bar" aria-label="Filtri per zona, genere e posizione">
+            <div class="filter-select-wrapper">
+                <select id="select-zone" class="filter-select" aria-label="Seleziona zona">
+                    <option value="all">Tutte le zone</option>
+                    <option value="Centro">Centro</option>
+                    <option value="Zona Stazione">Zona Stazione</option>
+                    <option value="Quartiere Est">Quartiere Est</option>
+                    <option value="Navigli">Navigli</option>
+                </select>
+                <span class="select-chevron">▾</span>
+            </div>
+
+            <div class="filter-select-wrapper">
+                <select id="select-genre" class="filter-select" aria-label="Seleziona genere musicale">
+                    <option value="all">Tutti i generi</option>
+                    <option value="Vario / Misto">Vario / Misto</option>
+                    <option value="House / Techno">House / Techno</option>
+                    <option value="Jazz / Soul">Jazz / Soul</option>
+                    <option value="Rock / Indie">Rock / Indie</option>
+                    <option value="Elettronica">Elettronica</option>
+                </select>
+                <span class="select-chevron">▾</span>
+            </div>
+
+            <div class="filter-select-wrapper">
+                <select id="select-type" class="filter-select" aria-label="Seleziona tipologia di evento">
+                    <option value="all">Tutti i tipi</option>
+                    <option value="Aperitivo">Aperitivo</option>
+                    <option value="Serata in discoteca">Serata in discoteca</option>
+                    <option value="Concerto">Concerto</option>
+                </select>
+                <span class="select-chevron">▾</span>
+            </div>
+
+            <div class="search-input-wrapper">
+                <input type="text" id="input-search" class="search-input" placeholder="Città, provincia o regione..." aria-label="Cerca eventi per città o testo" />
+            </div>
+
+            <button type="button" class="action-pill-btn" id="btn-user-location" title="Trova eventi vicini a te">
+                Usa la mia posizione
+            </button>
+
+            <button type="button" class="action-pill-btn" id="btn-reset-filters" title="Reimposta tutti i filtri">
+                Azzera
+            </button>
+        </section>
+
+        <!-- RIGA CONTEGGIO EVENTI -->
+        <div class="events-count-row">
+            <span id="events-count-text">10 eventi in programma</span>
+        </div>
+
+        <!-- VISTA LISTA: GRIGLIA CARDS -->
+        <section id="events-view-list" class="events-view-list">
+            <div class="events-grid" id="events-grid">
+                <!-- Le schede evento vengono popolate dinamicamente da index.js -->
+            </div>
+        </section>
+
+        <!-- VISTA MAPPA (INTERATTIVA) -->
+        <section id="events-view-map" class="events-view-map" style="display: none;">
+            <div class="map-view-card">
+                <div id="map" class="home-map-container">
+                    <div class="map-loading-placeholder">
+                        <div class="spinner"></div>
+                        <p>Caricamento mappa interattiva...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODALE: AGGIUNGI EVENTO -->
+    <div id="modal-add-event" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-add-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-add-title">Aggiungi nuovo evento</h3>
+                <button type="button" class="modal-close-btn" id="btn-close-modal-add" aria-label="Chiudi modale">&times;</button>
+            </div>
+            <form id="form-add-event" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-title">Titolo evento *</label>
+                        <input type="text" id="event-title" name="title" required placeholder="Es. Aperitivo con Dj set" />
+                    </div>
+                    <div class="form-group">
+                        <label for="event-venue">Nome locale / Venue *</label>
+                        <input type="text" id="event-venue" name="venue" required placeholder="Es. Bar Centrale" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-city">Città *</label>
+                        <input type="text" id="event-city" name="city" required placeholder="Es. Roma, Milano, Bologna" />
+                    </div>
+                    <div class="form-group">
+                        <label for="event-zone">Zona *</label>
+                        <select id="event-zone" name="zone">
+                            <option value="Centro">Centro</option>
+                            <option value="Zona Stazione">Zona Stazione</option>
+                            <option value="Quartiere Est">Quartiere Est</option>
+                            <option value="Navigli">Navigli</option>
+                            <option value="Periferia">Periferia</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-genre">Genere *</label>
+                        <select id="event-genre" name="genre">
+                            <option value="Vario / Misto">Vario / Misto</option>
+                            <option value="House / Techno">House / Techno</option>
+                            <option value="Jazz / Soul">Jazz / Soul</option>
+                            <option value="Rock / Indie">Rock / Indie</option>
+                            <option value="Elettronica">Elettronica</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-type">Tipo di serata *</label>
+                        <select id="event-type" name="type">
+                            <option value="Aperitivo">Aperitivo</option>
+                            <option value="Serata in discoteca">Serata in discoteca</option>
+                            <option value="Concerto">Concerto</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-date">Giorno *</label>
+                        <select id="event-date" name="date">
+                            <option value="oggi">Oggi</option>
+                            <option value="domani">Domani</option>
+                            <option value="weekend">Weekend</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-time">Orario *</label>
+                        <input type="text" id="event-time" name="time" placeholder="Es. ore 19:30" value="ore 20:00" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-price">Prezzo *</label>
+                        <input type="text" id="event-price" name="price" placeholder="Es. Gratuito, 10€ con drink" value="Gratuito" />
+                    </div>
+                    <div class="form-group">
+                        <label for="event-address">Indirizzo completo</label>
+                        <input type="text" id="event-address" name="address" placeholder="Es. Via Roma 10" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="event-description">Descrizione serata</label>
+                    <textarea id="event-description" name="description" rows="3" placeholder="Descrivi il programma della serata, artisti, dettagli sull'ingresso..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="btn-cancel-add">Annulla</button>
+                    <button type="submit" class="btn-submit" id="btn-submit-add">Pubblica evento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODALE: DETTAGLI EVENTO -->
+    <div id="modal-details" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-details-title">
+        <div class="modal-content modal-content--details">
+            <div class="modal-header">
+                <h3 id="modal-details-title">Dettagli evento</h3>
+                <button type="button" class="modal-close-btn" id="btn-close-modal-details" aria-label="Chiudi dettagli">&times;</button>
+            </div>
+            <div class="modal-details-body" id="modal-details-body">
+                <!-- Popolato da JS al click su "Dettagli" -->
+            </div>
+        </div>
+    </div>
+
+    <!-- AUDIO PLAYER TOAST -->
+    <div id="audio-preview-toast" class="audio-toast" style="display: none;">
+        <span class="audio-icon-pulse">♪</span>
+        <div class="audio-toast-text">
+            <strong id="audio-toast-title">Anteprima Audio</strong>
+            <span id="audio-toast-genre">Genere in riproduzione...</span>
+        </div>
+        <button type="button" class="audio-toast-close" id="btn-close-audio" aria-label="Chiudi">&times;</button>
+    </div>
+
+    <!-- NOTIFICHE TOAST FEEDBACK -->
+    <div id="toast-notification" class="toast-notification" style="display: none;"></div>
+
+    <!-- FOOTER CONDIVISO -->
+    <div id="footer"></div>
+    <script>
+        (function() {
+            var apiPrefix = window.location.pathname.startsWith("/api/v1") ? "/api/v1" : "";
+            fetch(apiPrefix + "/components/footer.html")
+                .then(function(res) { return res.text(); })
+                .then(function(html) {
+                    document.getElementById("footer").innerHTML = html;
+                });
+        })();
+    </script>
+
+    <!-- SCRIPT PRINCIPALE HOME -->
+    <script src="/js/index.js"></script>
+
+</body>
+
+</html>
